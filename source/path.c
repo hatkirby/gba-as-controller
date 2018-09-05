@@ -94,6 +94,8 @@ static step_t deposit_path[] = {
 };
 
 static step_t next_box_path[] = {
+  { ACTION_R,      20 },
+  { ACTION_NONE,   60 }
 };
 
 static step_t row_scrolling_path[] = {
@@ -130,12 +132,12 @@ static uint16_t pathLens[] = {
   23,
   2,
   28,
-  sizeof next_box_path,
+  2,
   sizeof row_scrolling_path,
   sizeof press_a_path,
   sizeof rev_row_scrolling_path,
   sizeof swap_with_party_path,
-  sizeof box_scrolling_path,
+  2,
   sizeof withdraw_path
 };
 

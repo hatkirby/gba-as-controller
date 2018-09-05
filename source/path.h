@@ -14,7 +14,9 @@ typedef struct {
     ACTION_LEFT,
     ACTION_RIGHT,
     ACTION_START,
-    ACTION_SELECT
+    ACTION_SELECT,
+    ACTION_L,
+    ACTION_R
   } action;
   uint16_t vcounts;
 } step_t;

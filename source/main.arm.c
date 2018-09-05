@@ -109,14 +109,6 @@ static struct {
 	.substick = { 128, 128 },
 };
 
-static struct {
-	struct buttons buttons;
-	struct { uint8_t x, y; } stick;
-	struct { uint8_t x, y; } substick;
-	struct { uint8_t l, r; } trigger;
-	struct { uint8_t a, b; } button;
-} saved;
-
 static uint8_t buffer[128];
 
 static enum {
@@ -196,7 +188,6 @@ int IWRAM_CODE main(void)
   unsigned int vblanks = 0;
   bool countVblanks = false;
   bool inVblank = false;
-  bool pressedUp = false;
   const step_t* lastAction = 0;
 
 	while (true) {
@@ -315,6 +306,18 @@ int IWRAM_CODE main(void)
           case ACTION_SELECT:
           {
             origin.buttons.z     = true;
+            break;
+          }
+
+          case ACTION_L:
+          {
+            origin.buttons.l     = true;
+            break;
+          }
+
+          case ACTION_R:
+          {
+            origin.buttons.r     = true;
             break;
           }
         }
