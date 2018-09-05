@@ -11,7 +11,11 @@
 #define ROM_GPIODIR  *((int16_t *)0x080000C6)
 #define ROM_GPIOCNT  *((int16_t *)0x080000C8)
 
+#define REG_VCOUNT *(vu16*)0x04000006
+
 //#define ANALOG
+
+#define GPIO_IRQ		0x0100
 
 enum {
 	CMD_ID = 0x00,
@@ -104,6 +108,14 @@ static struct {
 	.substick = { 128, 128 },
 };
 
+static struct {
+	struct buttons buttons;
+	struct { uint8_t x, y; } stick;
+	struct { uint8_t x, y; } substick;
+	struct { uint8_t l, r; } trigger;
+	struct { uint8_t a, b; } button;
+} saved;
+
 static uint8_t buffer[128];
 
 static enum {
@@ -112,6 +124,33 @@ static enum {
 	RUMBLE_NDS,
 	RUMBLE_NDS_SLIDE,
 } rumble;
+
+typedef struct {
+  enum {
+    ACTION_NONE,
+    ACTION_A,
+    ACTION_B,
+    ACTION_UP,
+    ACTION_DOWN,
+    ACTION_LEFT,
+    ACTION_RIGHT,
+    ACTION_START,
+    ACTION_SELECT
+  } action;
+  uint16_t vcounts;
+} step_t;
+
+static step_t path[] = {
+  { ACTION_UP,     60 },
+  { ACTION_NONE,   60 },
+  { ACTION_LEFT,   60 },
+  { ACTION_NONE,   60 },
+  { ACTION_DOWN,   60 },
+  { ACTION_NONE,   60 },
+  { ACTION_LEFT,   60 }
+};
+
+static uint16_t path_length = 7;
 
 static bool has_motor(void)
 {
@@ -180,11 +219,33 @@ int IWRAM_CODE main(void)
 	SoundBias(0);
 	Halt();
 
+  unsigned int vblanks = 0;
+  bool countVblanks = false;
+  bool inVblank = false;
+  bool pressedUp = false;
+
+  bool startProgram = false;
+  unsigned int pathCur = 0;
+
 	while (true) {
+    if (inVblank && (REG_VCOUNT < 160))
+    {
+      inVblank = false;
+    } else if (!inVblank && (REG_VCOUNT >= 160))
+    {
+      inVblank = true;
+
+      if (countVblanks)
+      {
+        vblanks++;
+      }
+    }
+
 		int length = SIGetCommand(buffer, sizeof(buffer) * 8 + 1);
 		if (length < 9) continue;
 
 		unsigned buttons     = ~REG_KEYINPUT;
+    /*
 		origin.buttons.a     = !!(buttons & KEY_A);
 		origin.buttons.b     = !!(buttons & KEY_B);
 		origin.buttons.z     = !!(buttons & KEY_SELECT);
@@ -196,7 +257,118 @@ int IWRAM_CODE main(void)
 		origin.buttons.down  = !!(buttons & KEY_DOWN);
 		#endif
 		origin.buttons.r     = !!(buttons & KEY_R);
-		origin.buttons.l     = !!(buttons & KEY_L);
+		origin.buttons.l     = !!(buttons & KEY_L);*/
+
+		origin.buttons.a     = false;
+		origin.buttons.b     = false;
+		origin.buttons.z     = false;
+		origin.buttons.start = false;
+		origin.buttons.right = false;
+		origin.buttons.left  = false;
+		origin.buttons.up    = false;
+		origin.buttons.down  = false;
+		origin.buttons.r     = false;
+		origin.buttons.l     = false;
+
+    if (!startProgram && !!(buttons & KEY_START))
+    {
+      startProgram = true;
+      pathCur = 0;
+      countVblanks = true;
+      vblanks = 0;
+    }
+
+    if (startProgram)
+    {
+      switch (path[pathCur].action)
+      {
+        case ACTION_NONE:
+        {
+          break;
+        }
+
+        case ACTION_A:
+        {
+          origin.buttons.a     = true;
+          break;
+        }
+
+        case ACTION_B:
+        {
+          origin.buttons.b     = true;
+          break;
+        }
+
+        case ACTION_UP:
+        {
+          origin.buttons.up    = true;
+          break;
+        }
+
+        case ACTION_DOWN:
+        {
+          origin.buttons.down  = true;
+          break;
+        }
+
+        case ACTION_LEFT:
+        {
+          origin.buttons.left  = true;
+          break;
+        }
+
+        case ACTION_RIGHT:
+        {
+          origin.buttons.right = true;
+          break;
+        }
+
+        case ACTION_START:
+        {
+          origin.buttons.start = true;
+          break;
+        }
+
+        case ACTION_SELECT:
+        {
+          origin.buttons.z     = true;
+          break;
+        }
+      }
+
+      if (vblanks >= path[pathCur].vcounts)
+      {
+        pathCur++;
+        vblanks = 0;
+
+        if (pathCur >= path_length)
+        {
+          startProgram = false;
+          countVblanks = false;
+          inVblank = false;
+        }
+      }
+    }
+
+    /*if (origin.buttons.up && !pressedUp)
+    {
+      pressedUp = true;
+      countVblanks = true;
+      vblanks = 0;
+    } else if (!origin.buttons.up && pressedUp)
+    {
+      pressedUp = false;
+      countVblanks = false;
+    }
+
+    if (!(origin.buttons.up && vblanks > 360))
+    {
+      origin.buttons.up = false;
+    }*/
+
+    //origin.buttons.up = false;
+
+
 
 		switch (buffer[0]) {
 			case CMD_RESET:
