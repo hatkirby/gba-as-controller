@@ -58,6 +58,8 @@ static step_t man_to_pc_path[] = {
 };
 
 static step_t box_scrolling_path[] = {
+  { ACTION_RIGHT,  20 },
+  { ACTION_NONE,    1 }
 };
 
 static step_t deposit_path[] = {
@@ -98,7 +100,7 @@ static step_t* paths[] = {
 static uint16_t pathLens[] = {
   3,
   23,
-  sizeof box_scrolling_path,
+  2,
   sizeof deposit_path,
   sizeof next_box_path,
   sizeof row_scrolling_path,
@@ -194,6 +196,11 @@ const step_t* doProgram(unsigned int vblanks)
           } else if (programProgress == UP_TO_PARTY)
           {
             scrollAmt = row + 2;
+          }
+
+          if (scrollAmt == 0)
+          {
+            programProgress++;
           }
         }
       }
