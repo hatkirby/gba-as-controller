@@ -63,6 +63,34 @@ static step_t box_scrolling_path[] = {
 };
 
 static step_t deposit_path[] = {
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_B,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_B,      20 },
+  { ACTION_NONE,   70 },
+  { ACTION_DOWN,   20 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   70 },
+  { ACTION_SELECT, 20 },
+  { ACTION_NONE,   10 }
 };
 
 static step_t next_box_path[] = {
@@ -101,7 +129,7 @@ static uint16_t pathLens[] = {
   3,
   23,
   2,
-  sizeof deposit_path,
+  28,
   sizeof next_box_path,
   sizeof row_scrolling_path,
   sizeof press_a_path,
@@ -190,6 +218,11 @@ const step_t* doProgram(unsigned int vblanks)
               programProgress == SCROLLING_MOVE)
           {
             scrollAmt = box;
+
+            if (row == 0)
+            {
+              scrollAmt--;
+            }
           } else if (programProgress == DOWN_TO_ROW)
           {
             scrollAmt = row;
