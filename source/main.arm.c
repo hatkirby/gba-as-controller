@@ -5,6 +5,7 @@
 #include <gba_sio.h>
 #include <gba_timers.h>
 #include "bios.h"
+#include "path.h"
 
 #define ROM           ((int16_t *)0x08000000)
 #define ROM_GPIODATA *((int16_t *)0x080000C4)
@@ -125,33 +126,6 @@ static enum {
 	RUMBLE_NDS_SLIDE,
 } rumble;
 
-typedef struct {
-  enum {
-    ACTION_NONE,
-    ACTION_A,
-    ACTION_B,
-    ACTION_UP,
-    ACTION_DOWN,
-    ACTION_LEFT,
-    ACTION_RIGHT,
-    ACTION_START,
-    ACTION_SELECT
-  } action;
-  uint16_t vcounts;
-} step_t;
-
-static step_t path[] = {
-  { ACTION_UP,     60 },
-  { ACTION_NONE,   60 },
-  { ACTION_LEFT,   60 },
-  { ACTION_NONE,   60 },
-  { ACTION_DOWN,   60 },
-  { ACTION_NONE,   60 },
-  { ACTION_LEFT,   60 }
-};
-
-static uint16_t path_length = 7;
-
 static bool has_motor(void)
 {
 	switch (ROM[0x59]) {
@@ -223,9 +197,7 @@ int IWRAM_CODE main(void)
   bool countVblanks = false;
   bool inVblank = false;
   bool pressedUp = false;
-
-  bool startProgram = false;
-  unsigned int pathCur = 0;
+  const step_t* lastAction = 0;
 
 	while (true) {
     if (inVblank && (REG_VCOUNT < 160))
@@ -270,105 +242,87 @@ int IWRAM_CODE main(void)
 		origin.buttons.r     = false;
 		origin.buttons.l     = false;
 
-    if (!startProgram && !!(buttons & KEY_START))
+    if (!isProgramRunning() && !!(buttons & KEY_START))
     {
-      startProgram = true;
-      pathCur = 0;
+      startProgram();
+
       countVblanks = true;
       vblanks = 0;
+      lastAction = 0;
     }
 
-    if (startProgram)
+    if (isProgramRunning())
     {
-      switch (path[pathCur].action)
+      const step_t* curAction = doProgram(vblanks);
+
+      if (curAction != 0)
       {
-        case ACTION_NONE:
+        if (curAction != lastAction)
         {
-          break;
+          lastAction = curAction;
+          vblanks = 0;
         }
 
-        case ACTION_A:
+        switch (curAction->action)
         {
-          origin.buttons.a     = true;
-          break;
-        }
+          case ACTION_NONE:
+          {
+            break;
+          }
 
-        case ACTION_B:
-        {
-          origin.buttons.b     = true;
-          break;
-        }
+          case ACTION_A:
+          {
+            origin.buttons.a     = true;
+            break;
+          }
 
-        case ACTION_UP:
-        {
-          origin.buttons.up    = true;
-          break;
-        }
+          case ACTION_B:
+          {
+            origin.buttons.b     = true;
+            break;
+          }
 
-        case ACTION_DOWN:
-        {
-          origin.buttons.down  = true;
-          break;
-        }
+          case ACTION_UP:
+          {
+            origin.buttons.up    = true;
+            break;
+          }
 
-        case ACTION_LEFT:
-        {
-          origin.buttons.left  = true;
-          break;
-        }
+          case ACTION_DOWN:
+          {
+            origin.buttons.down  = true;
+            break;
+          }
 
-        case ACTION_RIGHT:
-        {
-          origin.buttons.right = true;
-          break;
-        }
+          case ACTION_LEFT:
+          {
+            origin.buttons.left  = true;
+            break;
+          }
 
-        case ACTION_START:
-        {
-          origin.buttons.start = true;
-          break;
-        }
+          case ACTION_RIGHT:
+          {
+            origin.buttons.right = true;
+            break;
+          }
 
-        case ACTION_SELECT:
-        {
-          origin.buttons.z     = true;
-          break;
-        }
-      }
+          case ACTION_START:
+          {
+            origin.buttons.start = true;
+            break;
+          }
 
-      if (vblanks >= path[pathCur].vcounts)
-      {
-        pathCur++;
-        vblanks = 0;
-
-        if (pathCur >= path_length)
-        {
-          startProgram = false;
-          countVblanks = false;
-          inVblank = false;
+          case ACTION_SELECT:
+          {
+            origin.buttons.z     = true;
+            break;
+          }
         }
+      } else {
+        countVblanks = false;
+        inVblank = false;
       }
     }
-
-    /*if (origin.buttons.up && !pressedUp)
-    {
-      pressedUp = true;
-      countVblanks = true;
-      vblanks = 0;
-    } else if (!origin.buttons.up && pressedUp)
-    {
-      pressedUp = false;
-      countVblanks = false;
-    }
-
-    if (!(origin.buttons.up && vblanks > 360))
-    {
-      origin.buttons.up = false;
-    }*/
-
-    //origin.buttons.up = false;
-
-
 
 		switch (buffer[0]) {
 			case CMD_RESET:
