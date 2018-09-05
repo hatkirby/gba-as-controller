@@ -104,12 +104,32 @@ static step_t row_scrolling_path[] = {
 };
 
 static step_t press_a_path[] = {
+  { ACTION_A,      10 },
+  { ACTION_NONE,   40 }
 };
 
 static step_t rev_row_scrolling_path[] = {
+  { ACTION_UP,     10 },
+  { ACTION_NONE,   10 }
 };
 
 static step_t swap_with_party_path[] = {
+  { ACTION_A,      20 },
+  { ACTION_NONE,   30 },
+  { ACTION_LEFT,   10 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_SELECT, 10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   20 },
+  { ACTION_DOWN,   10 },
+  { ACTION_NONE,   10 },
+  { ACTION_DOWN,   10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      10 },
+  { ACTION_NONE,   20 }
 };
 
 static step_t withdraw_path[] = {
@@ -136,9 +156,9 @@ static uint16_t pathLens[] = {
   28,
   2,
   2,
-  sizeof press_a_path,
-  sizeof rev_row_scrolling_path,
-  sizeof swap_with_party_path,
+  2,
+  2,
+  16,
   2,
   sizeof withdraw_path
 };
