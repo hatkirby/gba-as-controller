@@ -25,19 +25,36 @@ static int scrollAmt;
 static int pathPos;
 
 static step_t old_man_path[] = {
-  /*{ ACTION_UP,     60 },
-  { ACTION_NONE,   60 },
-  { ACTION_LEFT,   60 },
-  { ACTION_NONE,   60 },
-  { ACTION_DOWN,   60 },
-  { ACTION_NONE,   60 },
-  { ACTION_LEFT,   60 }*/
   { ACTION_A,      20 },
   { ACTION_NONE,   60 },
   { ACTION_A,      20 }
 };
 
 static step_t man_to_pc_path[] = {
+  { ACTION_DOWN,   80 },
+  { ACTION_LEFT,   55 },
+  { ACTION_DOWN,  190 },
+  { ACTION_LEFT,  170 },
+  { ACTION_UP,    400 },
+  { ACTION_RIGHT,  40 },
+  { ACTION_UP,     40 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_DOWN,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   70 },
+  { ACTION_SELECT, 20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 }
 };
 
 static step_t box_scrolling_path[] = {
@@ -79,8 +96,8 @@ static step_t* paths[] = {
 };
 
 static uint16_t pathLens[] = {
-  sizeof old_man_path,
-  sizeof man_to_pc_path,
+  3,
+  23,
   sizeof box_scrolling_path,
   sizeof deposit_path,
   sizeof next_box_path,
