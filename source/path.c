@@ -14,6 +14,8 @@ static enum {
   UP_TO_PARTY, // [row+2]
   SWAP_WITH_PARTY,
   SCROLLING_MOVE, // [box]
+  PC_WITHDRAW_POKEMON,
+  DOWN_TO_ROW_2, // [row]
   WITHDRAW_AND_GO,
   LOOP
 } programProgress;
@@ -132,7 +134,27 @@ static step_t swap_with_party_path[] = {
   { ACTION_NONE,   20 }
 };
 
+static step_t finish_move_path[] = {
+  { ACTION_A,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_B,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_B,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_B,      20 },
+  { ACTION_NONE,   70 },
+  { ACTION_UP,     10 },
+  { ACTION_NONE,   10 },
+  { ACTION_UP,     10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   70 },
+  { ACTION_SELECT, 10 },
+  { ACTION_NONE,   10 }
+};
+
 static step_t withdraw_path[] = {
+
 };
 
 static step_t* paths[] = {
@@ -146,6 +168,8 @@ static step_t* paths[] = {
   rev_row_scrolling_path,
   swap_with_party_path,
   box_scrolling_path,
+  finish_move_path,
+  row_scrolling_path,
   withdraw_path
 };
 
@@ -157,6 +181,8 @@ static uint16_t pathLens[] = {
   2,
   2,
   2,
+  2,
+  16,
   2,
   16,
   2,
@@ -195,7 +221,8 @@ const step_t* doProgram(unsigned int vblanks)
         if (programProgress == SCROLLING_DEPOSIT ||
             programProgress == DOWN_TO_ROW       ||
             programProgress == UP_TO_PARTY       ||
-            programProgress == SCROLLING_MOVE)
+            programProgress == SCROLLING_MOVE    ||
+            programProgress == DOWN_TO_ROW_2)
         {
           scrollCur++;
 
@@ -247,7 +274,8 @@ const step_t* doProgram(unsigned int vblanks)
             {
               scrollAmt--;
             }
-          } else if (programProgress == DOWN_TO_ROW)
+          } else if (programProgress == DOWN_TO_ROW ||
+                     programProgress == DOWN_TO_ROW_2)
           {
             scrollAmt = row;
           } else if (programProgress == UP_TO_PARTY)
