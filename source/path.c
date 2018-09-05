@@ -99,6 +99,8 @@ static step_t next_box_path[] = {
 };
 
 static step_t row_scrolling_path[] = {
+  { ACTION_DOWN,   10 },
+  { ACTION_NONE,   10 }
 };
 
 static step_t press_a_path[] = {
@@ -133,7 +135,7 @@ static uint16_t pathLens[] = {
   2,
   28,
   2,
-  sizeof row_scrolling_path,
+  2,
   sizeof press_a_path,
   sizeof rev_row_scrolling_path,
   sizeof swap_with_party_path,
