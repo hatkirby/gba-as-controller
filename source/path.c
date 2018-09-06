@@ -1,5 +1,8 @@
 #include "path.h"
 
+#define ROWS_PER_BOX 5
+#define NUM_BOXES 5
+
 static bool programRunning = false;
 
 static enum {
@@ -277,12 +280,12 @@ const step_t* doProgram(unsigned int vblanks)
           {
             row++;
 
-            if (row == 5)
+            if (row == ROWS_PER_BOX)
             {
               row = 0;
               box++;
 
-              if (box == 5)
+              if (box == NUM_BOXES)
               {
                 programRunning = false;
 
