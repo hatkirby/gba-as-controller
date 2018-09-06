@@ -32,7 +32,8 @@ static int pathPos;
 static step_t old_man_path[] = {
   { ACTION_A,      20 },
   { ACTION_NONE,   60 },
-  { ACTION_A,      20 }
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 }
 };
 
 static step_t man_to_pc_path[] = {
@@ -43,6 +44,7 @@ static step_t man_to_pc_path[] = {
   { ACTION_UP,    400 },
   { ACTION_RIGHT,  40 },
   { ACTION_UP,     40 },
+  { ACTION_NONE,   20 },
   { ACTION_A,      20 },
   { ACTION_NONE,   20 },
   { ACTION_A,      20 },
@@ -59,7 +61,7 @@ static step_t man_to_pc_path[] = {
   { ACTION_SELECT, 20 },
   { ACTION_NONE,   20 },
   { ACTION_A,      20 },
-  { ACTION_NONE,   20 }
+  { ACTION_NONE,   40 }
 };
 
 static step_t box_scrolling_path[] = {
@@ -68,24 +70,24 @@ static step_t box_scrolling_path[] = {
 };
 
 static step_t deposit_path[] = {
-  { ACTION_A,      10 },
-  { ACTION_NONE,   10 },
-  { ACTION_A,      10 },
-  { ACTION_NONE,   10 },
-  { ACTION_A,      10 },
-  { ACTION_NONE,   10 },
-  { ACTION_A,      10 },
-  { ACTION_NONE,   10 },
-  { ACTION_A,      10 },
-  { ACTION_NONE,   10 },
-  { ACTION_A,      10 },
-  { ACTION_NONE,   10 },
-  { ACTION_A,      10 },
-  { ACTION_NONE,   10 },
-  { ACTION_A,      10 },
-  { ACTION_NONE,   10 },
-  { ACTION_A,      10 },
-  { ACTION_NONE,   10 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   20 },
   { ACTION_B,      20 },
   { ACTION_NONE,   20 },
   { ACTION_B,      20 },
@@ -95,7 +97,7 @@ static step_t deposit_path[] = {
   { ACTION_A,      20 },
   { ACTION_NONE,   70 },
   { ACTION_SELECT, 20 },
-  { ACTION_NONE,   10 }
+  { ACTION_NONE,   30 }
 };
 
 static step_t next_box_path[] = {
@@ -104,18 +106,18 @@ static step_t next_box_path[] = {
 };
 
 static step_t row_scrolling_path[] = {
-  { ACTION_DOWN,   10 },
-  { ACTION_NONE,   10 }
+  { ACTION_DOWN,   20 },
+  { ACTION_NONE,   20 }
 };
 
 static step_t press_a_path[] = {
-  { ACTION_A,      10 },
+  { ACTION_A,      20 },
   { ACTION_NONE,   40 }
 };
 
 static step_t rev_row_scrolling_path[] = {
-  { ACTION_UP,     10 },
-  { ACTION_NONE,   10 }
+  { ACTION_UP,     20 },
+  { ACTION_NONE,   20 }
 };
 
 static step_t swap_with_party_path[] = {
@@ -134,7 +136,7 @@ static step_t swap_with_party_path[] = {
   { ACTION_DOWN,   10 },
   { ACTION_NONE,   10 },
   { ACTION_A,      10 },
-  { ACTION_NONE,   20 }
+  { ACTION_NONE,   40 }
 };
 
 static step_t finish_move_path[] = {
@@ -153,7 +155,7 @@ static step_t finish_move_path[] = {
   { ACTION_A,      20 },
   { ACTION_NONE,   70 },
   { ACTION_SELECT, 10 },
-  { ACTION_NONE,   10 }
+  { ACTION_NONE,   30 }
 };
 
 static step_t withdraw_path[] = {
@@ -187,14 +189,15 @@ static step_t withdraw_path[] = {
   { ACTION_B,      20 },
   { ACTION_NONE,   20 },
   { ACTION_DOWN,   40 },
-  { ACTION_LEFT,   40 },
-  { ACTION_DOWN,  400 },
-  { ACTION_UP,     20 },
+  { ACTION_LEFT,   50 },
+  { ACTION_DOWN,  420 },
+  { ACTION_UP,     15 },
   { ACTION_RIGHT, 170 },
   { ACTION_UP,    235 },
   { ACTION_RIGHT,  55 },
   { ACTION_UP,     30 },
-  { ACTION_RIGHT,  20 }
+  { ACTION_RIGHT,  20 },
+  { ACTION_NONE,   40 }
 };
 
 static step_t* paths[] = {
@@ -214,8 +217,8 @@ static step_t* paths[] = {
 };
 
 static uint16_t pathLens[] = {
-  3,
-  23,
+  4,
+  25,
   2,
   28,
   2,
@@ -226,7 +229,7 @@ static uint16_t pathLens[] = {
   2,
   16,
   2,
-  37
+  38
 };
 
 void startProgram()
