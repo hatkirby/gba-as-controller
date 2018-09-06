@@ -314,18 +314,23 @@ const step_t* doProgram(unsigned int vblanks)
             {
               scrollAmt--;
             }
+
+            if (scrollAmt == 0)
+            {
+              programProgress++;
+            }
           } else if (programProgress == DOWN_TO_ROW ||
                      programProgress == DOWN_TO_ROW_2)
           {
             scrollAmt = row;
+
+            if (scrollAmt == 0)
+            {
+              programProgress++;
+            }
           } else if (programProgress == UP_TO_PARTY)
           {
             scrollAmt = row + 2;
-          }
-
-          if (scrollAmt == 0)
-          {
-            programProgress++;
           }
         }
       }
