@@ -246,14 +246,14 @@ int IWRAM_CODE main(void)
     {
       const step_t* curAction = doProgram(vblanks);
 
+      if (curAction != lastAction)
+      {
+        lastAction = curAction;
+        vblanks = 0;
+      }
+
       if (curAction != 0)
       {
-        if (curAction != lastAction)
-        {
-          lastAction = curAction;
-          vblanks = 0;
-        }
-
         switch (curAction->action)
         {
           case ACTION_NONE:

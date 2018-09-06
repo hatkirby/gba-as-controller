@@ -154,7 +154,44 @@ static step_t finish_move_path[] = {
 };
 
 static step_t withdraw_path[] = {
-
+  { ACTION_RIGHT,  10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   90 },
+  { ACTION_RIGHT,  10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   90 },
+  { ACTION_RIGHT,  10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   90 },
+  { ACTION_RIGHT,  10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   90 },
+  { ACTION_RIGHT,  10 },
+  { ACTION_NONE,   10 },
+  { ACTION_A,      20 },
+  { ACTION_NONE,   90 },
+  // Done withdrawing
+  { ACTION_B,      10 },
+  { ACTION_NONE,   10 },
+  { ACTION_B,      20 },
+  { ACTION_NONE,   70 },
+  { ACTION_B,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_B,      20 },
+  { ACTION_NONE,   20 },
+  { ACTION_DOWN,   40 },
+  { ACTION_LEFT,   40 },
+  { ACTION_DOWN,  400 },
+  { ACTION_UP,     20 },
+  { ACTION_RIGHT, 170 },
+  { ACTION_UP,    235 },
+  { ACTION_RIGHT,  55 },
+  { ACTION_UP,     30 },
+  { ACTION_RIGHT,  20 }
 };
 
 static step_t* paths[] = {
@@ -186,7 +223,7 @@ static uint16_t pathLens[] = {
   2,
   16,
   2,
-  sizeof withdraw_path
+  37
 };
 
 void startProgram()
